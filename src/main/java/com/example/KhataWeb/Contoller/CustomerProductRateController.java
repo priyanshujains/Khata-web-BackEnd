@@ -19,13 +19,19 @@ public class CustomerProductRateController {
         this.customerProductRateService=customerProductRateService;
     }
 
+    @GetMapping("/{custId}")
+    public ResponseEntity<?> getAllCustomerProductRates(@PathVariable Long custId){
+        return new ResponseEntity<>(customerProductRateService.getAllCustomerProductRates(custId),HttpStatus.OK);
+    }
+
+
     @PostMapping("/{custId}")
     public ResponseEntity<?> addCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
-        return new ResponseEntity<>(customerProductRateService.addCustomerProductRate(custId ,productRates), HttpStatus.OK);
+        return new ResponseEntity<>(customerProductRateService.addCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
     }
 
 //    @PostMapping({"/{custId}")
-//    public ResponseEntity<?>  updateCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
+//   public ResponseEntity<?>  updateCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
 //        return new ResponseEntity<>(customerProductRateService.updateCustomerProductRate(custId,productRates),HttpStatus.OK);
 //    }
 

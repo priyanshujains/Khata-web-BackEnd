@@ -9,9 +9,10 @@ import java.util.List;
 @Service
 public interface CustomerProductRateService {
 
+    List<ProductRate>  getAllCustomerProductRates(Long custId);
 
+    String addCustomerProductRate(Long custId, List<ProductRate> productRates);
 
-String addCustomerProductRate(Long custId, List<ProductRate> productRates);
+   //String updateCustomerProductRate(Long custId, List<ProductRate> productRates);
 
-//    String updateCustomerProductRate(Long custId, List<ProductRate> productRates);
-
+}
