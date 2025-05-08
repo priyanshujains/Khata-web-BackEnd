@@ -1,0 +1,81 @@
+package com.example.KhataWeb.Service;
+
+import com.example.KhataWeb.Dtos.OrderItemRequest;
+import com.example.KhataWeb.Models.*;
+import com.example.KhataWeb.Repos.CustomerRepos;
+import com.example.KhataWeb.Repos.ProductRepo;
+import com.example.KhataWeb.Repos.ReceiptRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class ReceiptServiceImpl {
+
+
+    private final CustomerRepos customerRepository;
+    private final ProductRepo productRepository;
+    private final ReceiptRepo receiptRepository;
+   // private final CustomerProductRateRepository customerProductRateRepository;
+
+    @Autowired
+    public ReceiptServiceImpl(CustomerRepos customerRepository,
+                              ProductRepo productRepository,
+                              ReceiptRepo receiptRepository){
+        this.customerRepository=customerRepository;
+        this.receiptRepository=receiptRepository;
+        this.productRepository=productRepository;
+    }
+
+
+    public Receipt addReceipt(Long customerId, List<OrderItemRequest> inputItems, boolean delivery) {
+
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        // Fetch all custom rates for this customer
+        List<CustomerProductRate> customRates = customerProductRateRepository.findAllByCustomer(customer);
+
+        // Convert to Map<productId, rate>
+        Map<Long, Double> productRateMap = new HashMap<>();
+        for (CustomerProductRate rate : customRates) {
+            productRateMap.put(rate.getProduct().getId(), rate.getCustomRate());
+        }
+
+        List<OrderItem> finalItemList = new ArrayList<>();
+        double totalAmount = 0;
+
+        for (OrderItemRequest itemReq : inputItems) {
+            Product product = productRepository.findById(itemReq.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            long quantity = itemReq.getQuantity();
+            double rate = productRateMap.getOrDefault(product.getId(), product.getBasePrice());
+            double totalPrice = rate * quantity;
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setRate(rate);
+            orderItem.setQuantity(quantity);
+            orderItem.setTotalPrice(totalPrice);
+
+            finalItemList.add(orderItem);
+            totalAmount += totalPrice;
+        }
+
+        Receipt receipt = new Receipt();
+        receipt.setCustomer(customer);
+        receipt.setItemList(finalItemList);
+        receipt.setTotalAmount(totalAmount);
+        receipt.setDelivery(delivery);
+        receipt.setCreatedAt(LocalDateTime.now());
+
+        return receiptRepository.save(receipt);
+    }
+
+}
