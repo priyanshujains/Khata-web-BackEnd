@@ -13,10 +13,6 @@ public interface CustomerProductRateService {
 
     String addCustomerProductRate(Long custId, List<ProductRate> productRates);
 
-<<<<<<< HEAD
-//    String updateCustomerProductRate(Long custId, List<ProductRate> productRates);
-=======
-   //String updateCustomerProductRate(Long custId, List<ProductRate> productRates);
->>>>>>> origin/feature/ishka
 
+    String updateCustomerProductRate(Long custId, ProductRate productRates);
 }

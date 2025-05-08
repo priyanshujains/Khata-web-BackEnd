@@ -29,6 +29,11 @@ public class CustomerProductRateController {
     public ResponseEntity<?> addCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
         return new ResponseEntity<>(customerProductRateService.addCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
     }
+    @PutMapping("/{custId}")
+    public ResponseEntity<?> updateCustomerProductRate(@PathVariable Long custId, @RequestBody ProductRate productRates){
+        return new ResponseEntity<>(customerProductRateService.updateCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
+    }
+
 
 
 
