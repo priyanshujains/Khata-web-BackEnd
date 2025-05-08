@@ -2,6 +2,7 @@ package com.example.KhataWeb.Service;
 
 import com.example.KhataWeb.Dtos.OrderItemRequest;
 import com.example.KhataWeb.Models.*;
+import com.example.KhataWeb.Repos.CustomerProductRateRepo;
 import com.example.KhataWeb.Repos.CustomerRepos;
 import com.example.KhataWeb.Repos.ProductRepo;
 import com.example.KhataWeb.Repos.ReceiptRepo;
@@ -21,15 +22,18 @@ public class ReceiptServiceImpl {
     private final CustomerRepos customerRepository;
     private final ProductRepo productRepository;
     private final ReceiptRepo receiptRepository;
+    private final CustomerProductRateRepo customerProductRateRepository;
    // private final CustomerProductRateRepository customerProductRateRepository;
 
     @Autowired
     public ReceiptServiceImpl(CustomerRepos customerRepository,
                               ProductRepo productRepository,
-                              ReceiptRepo receiptRepository){
+                              ReceiptRepo receiptRepository,
+                              CustomerProductRateRepo customerProductRateRepository){
         this.customerRepository=customerRepository;
         this.receiptRepository=receiptRepository;
         this.productRepository=productRepository;
+        this.customerProductRateRepository=customerProductRateRepository;
     }
 
 
@@ -51,7 +55,7 @@ public class ReceiptServiceImpl {
         double totalAmount = 0;
 
         for (OrderItemRequest itemReq : inputItems) {
-            Product product = productRepository.findById(itemReq.getProductId())
+            Product product = productRepository.findById(itemReq.getPId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
             long quantity = itemReq.getQuantity();

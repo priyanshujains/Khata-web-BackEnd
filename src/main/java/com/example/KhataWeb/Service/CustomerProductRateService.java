@@ -10,8 +10,8 @@ import java.util.List;
 public interface CustomerProductRateService {
 
 
-
-String addCustomerProductRate(Long custId, List<ProductRate> productRates);
+    String addCustomerProductRate(Long custId, List<ProductRate> productRates);
 
 //    String updateCustomerProductRate(Long custId, List<ProductRate> productRates);
 
+}
