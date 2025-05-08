@@ -30,6 +30,23 @@ public class CustomerProductRateServiceImpl implements CustomerProductRateServic
     }
 
     @Override
+    public List<ProductRate> getAllCustomerProductRates(Long custId) {
+
+        Optional<Customer> customer=customerRepos.findById(custId);
+        if(customer.isEmpty()) throw new RuntimeException("No customer for this Id exist");
+        List<ProductRate> productRates=new ArrayList<>();
+        List<CustomerProductRate>  customerProductRates=customerProductRateRepo.findAllByCustomer(customer.get());
+        for(CustomerProductRate cr:customerProductRates){
+            ProductRate productRate=new ProductRate();
+            productRate.setPid(cr.getProduct().getId());
+            productRate.setCustomerRate(cr.getCustomRate());
+
+            productRates.add(productRate);
+        }
+        return productRates;
+    }
+
+    @Override
     public String addCustomerProductRate(Long custId, List<ProductRate> productRates) {
 
         Optional<Customer> optionalCustomer=customerRepos.findById(custId);
@@ -54,4 +71,7 @@ public class CustomerProductRateServiceImpl implements CustomerProductRateServic
         customerProductRateRepo.saveAll(customerProductRates);
         return "Rates added success" ;
     }
+
+
+
 }
