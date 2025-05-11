@@ -72,6 +72,17 @@ public class CustomerProductRateServiceImpl implements CustomerProductRateServic
         return "Rates added success" ;
     }
 
+    @Override
+    public String updateCustomerProductRate(Long custId, ProductRate productRates) {
 
 
+        Optional<CustomerProductRate> customerProductRate1= customerProductRateRepo.findByCustomerIdAndPId(custId,
+                productRates.getPid());
+        if(customerProductRate1.isEmpty()) throw new RuntimeException("No Product with this pid  for this customer ");
+
+        CustomerProductRate customerProductRate=customerProductRate1.get();
+
+        customerProductRate.setCustomRate(productRates.getCustomerRate());
+        return "ProductUpdated";
+    }
 }
