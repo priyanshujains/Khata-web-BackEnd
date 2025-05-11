@@ -58,9 +58,13 @@ public class ReceiptServiceImpl {
             Product product = productRepository.findById(itemReq.getPId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
+            if(product.getQuantity()<itemReq.getQuantity())throw new RuntimeException("Quantity is Less");
             long quantity = itemReq.getQuantity();
             double rate = productRateMap.getOrDefault(product.getId(), product.getBasePrice());
             double totalPrice = rate * quantity;
+
+            product.setQuantity(product.getQuantity()-itemReq.getQuantity());
+            productRepository.save(product);
 
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
@@ -82,4 +86,26 @@ public class ReceiptServiceImpl {
         return receiptRepository.save(receipt);
     }
 
+    public List<Receipt> getAllReceipt(Long cusId) {
+
+        Optional<Customer> optionalCustomer=customerRepository.findById(cusId);
+        if(optionalCustomer.isEmpty())throw new RuntimeException("Customer not exist");
+
+        return receiptRepository.findAllByCustomer(optionalCustomer.get());
+    }
+
+    public void deleteAReceipt(Long rId) {
+        Optional<Receipt> optionalReceipt=receiptRepository.findById(rId);
+        if(optionalReceipt.isEmpty())throw new RuntimeException("REceipt doesnot exixt");
+
+        receiptRepository.deleteById(rId);
+        return;
+    }
+
+    public Receipt getSingleReceipt(Long rId) {
+        Optional<Receipt> optionalReceipt=receiptRepository.findById(rId);
+        if(optionalReceipt.isEmpty())throw new RuntimeException("REceipt doesnot exixt");
+
+        return optionalReceipt.get();
+    }
 }

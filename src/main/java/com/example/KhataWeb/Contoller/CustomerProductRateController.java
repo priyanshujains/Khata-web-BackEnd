@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customerproductrate")
+@RequestMapping("/api/rates")
 public class CustomerProductRateController {
 
     private final CustomerProductRateService customerProductRateService;
@@ -29,10 +29,10 @@ public class CustomerProductRateController {
     public ResponseEntity<?> addCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
         return new ResponseEntity<>(customerProductRateService.addCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
     }
-    @PutMapping("/{custId}")
-    public ResponseEntity<?> updateCustomerProductRate(@PathVariable Long custId, @RequestBody ProductRate productRates){
-        return new ResponseEntity<>(customerProductRateService.updateCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
-    }
+//    @PutMapping("/{custId}")
+//    public ResponseEntity<?> updateCustomerProductRate(@PathVariable Long custId, @RequestBody ProductRate productRates){
+//        return new ResponseEntity<>(customerProductRateService.updateCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
+//    }
 
 
 
