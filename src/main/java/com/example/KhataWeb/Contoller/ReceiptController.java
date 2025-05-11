@@ -22,8 +22,12 @@ public class ReceiptController {
 
 
     @PostMapping("/{cusId}")
-        public ResponseEntity<?> addAReceipt(Long cusId, @RequestBody List<OrderItemRequest> orderItemRequests, @RequestParam
+        public ResponseEntity<?> addAReceipt(@PathVariable("cusId") Long cusId, @RequestBody List<OrderItemRequest> orderItemRequests, @RequestParam
                                              boolean delivery){
+        if (cusId == null) {
+            throw new IllegalArgumentException("     id must not be null");
+        }
+                System.out.println(orderItemRequests);
                 return new ResponseEntity<>(receiptService.addReceipt(cusId,orderItemRequests,delivery), HttpStatus.OK);
         }
 }

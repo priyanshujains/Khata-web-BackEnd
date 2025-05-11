@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ReceiptServiceImpl {
@@ -39,8 +36,10 @@ public class ReceiptServiceImpl {
 
     public Receipt addReceipt(Long customerId, List<OrderItemRequest> inputItems, boolean delivery) {
 
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        Optional<Customer> customer1 = customerRepository.findById(customerId);
+        if(customer1.isEmpty())throw new RuntimeException("Customer not exist");
+        Customer customer=customer1.get();
+
 
         // Fetch all custom rates for this customer
         List<CustomerProductRate> customRates = customerProductRateRepository.findAllByCustomer(customer);
@@ -55,6 +54,7 @@ public class ReceiptServiceImpl {
         double totalAmount = 0;
 
         for (OrderItemRequest itemReq : inputItems) {
+            System.out.println(itemReq.getPId());
             Product product = productRepository.findById(itemReq.getPId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
