@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setAddress(updatedcustomer.getAddress());
         customer.setDescription(updatedcustomer.getDescription());
         customer.setContact(updatedcustomer.getContact());
-        customer.setDeleted(updatedcustomer.isDeleted());
+        //customer.setDeleted(updatedcustomer.isDeleted());
         return customerRepos.save(customer);
 
 

@@ -20,13 +20,13 @@ public class CustomerProductRateController {
     }
 
     @GetMapping("/{custId}")
-    public ResponseEntity<?> getAllCustomerProductRates(@PathVariable Long custId){
+    public ResponseEntity<List<ProductRate>> getAllCustomerProductRates(@PathVariable Long custId){
         return new ResponseEntity<>(customerProductRateService.getAllCustomerProductRates(custId),HttpStatus.OK);
     }
 
 
     @PostMapping("/{custId}")
-    public ResponseEntity<?> addCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
+    public ResponseEntity<String> addCustomerProductRate(@PathVariable Long custId, @RequestBody List<ProductRate> productRates){
         return new ResponseEntity<>(customerProductRateService.addCustomerProductRate(custId ,productRates), HttpStatus.CREATED);
     }
 //    @PutMapping("/{custId}")
